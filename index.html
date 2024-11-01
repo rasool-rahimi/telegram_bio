@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Typewriter Effect with Backspace</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      background-color: black;
+      color: white;
+      font-family: monospace;
+      display: flex;
+      justify-content: flex-start;
+      align-items: flex-start;
+      height: 100vh;
+      overflow: hidden;
+    }
+    .typewriter {
+      font-size: 2rem;
+      padding: 20px;
+      white-space: nowrap;
+      overflow: hidden;
+    }
+    .cursor {
+      display: inline-block;
+      width: 10px;
+      height: 20px;
+      background-color: white;
+      margin-left: 2px;
+      animation: blink 0.7s infinite;
+    }
+    @keyframes blink {
+      0%, 50% {
+        opacity: 1;
+      }
+      50.1%, 100% {
+        opacity: 0;
+      }
+    }
+    @media (max-width: 768px) {
+      .typewriter {
+        font-size: 1.5rem;
+      }
+      .cursor {
+        height: 18px;
+        width: 8px;
+      }
+    }
+    @media (max-width: 480px) {
+      .typewriter {
+        font-size: 1.2rem;
+      }
+      .cursor {
+        height: 16px;
+        width: 6px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="typewriter" id="typewriter-text">
+    <span id="text"></span><span class="cursor"></span>
+  </div>
+  <script>
+    const sentences = ["Hey", "I am Rasool", "I am a developer", "I like coding", "Nice to meet you :)"];
+    const typingSpeed = 100;
+    const erasingSpeed = 40;
+    const shortDisplayTime = 2000;
+    const longDisplayTime = 4000;
+    let currentSentence = 0;
+    let currentChar = 0;
+    let isErasing = false;
+
+    function typeWriter() {
+      const textElement = document.getElementById("text");
+
+      if (!isErasing && currentChar < sentences[currentSentence].length) {
+        textElement.textContent += sentences[currentSentence][currentChar];
+        currentChar++;
+        setTimeout(typeWriter, typingSpeed);
+      } else if (!isErasing) {
+        isErasing = true;
+        const displayTime = currentSentence === 0 ? shortDisplayTime : longDisplayTime;
+        setTimeout(typeWriter, displayTime);
+      } else if (isErasing && currentChar > 0) {
+        textElement.textContent = sentences[currentSentence].substring(0, currentChar - 1);
+        currentChar--;
+        setTimeout(typeWriter, erasingSpeed);
+      } else {
+        isErasing = false;
+        currentSentence = (currentSentence + 1) % sentences.length;
+        setTimeout(typeWriter, typingSpeed);
+      }
+    }
+    typeWriter();
+  </script>
+</body>
+</html>
